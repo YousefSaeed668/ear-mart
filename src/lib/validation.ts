@@ -24,7 +24,7 @@ export const signupUserSchema = z.object({
 const signupSellerSchemaStep2 = z.object({
   Address: z.string().min(15).max(150),
   City: z.string().min(3).max(100),
-  PostalCode: z.string().min(3).max(100),
+  PostalCode: z.string().min(3).max(16),
   FirstName: z
     .string()
     .min(3)

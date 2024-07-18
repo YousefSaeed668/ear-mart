@@ -2,8 +2,8 @@ import { MaxWidth } from "@/components/MaxWidth";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <section>
-      {children}
+    <section className="overflow-x-hidden">
+      <MaxWidth>{children}</MaxWidth>
       {/* TODO : Make A Separate Footer Component As In The Design */}
       <footer>
         <MaxWidth>

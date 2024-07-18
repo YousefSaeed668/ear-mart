@@ -19,7 +19,8 @@ import {
 import { AuthInput } from "./AuthInput";
 import Link from "next/link";
 import { ChevronUp } from "lucide-react";
-import { MaxWidth } from "./MaxWidth";
+import LoadingButton from "./LoadingButton";
+
 motion;
 const steps = [
   {
@@ -54,12 +55,12 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
     handleSubmit,
     trigger,
     control,
-    watch,
-    formState: { isSubmitting, errors },
+    setError,
+    setFocus,
+    formState: { isSubmitting },
   } = form;
 
   type FieldName = keyof SignupSellerType;
-  // currentStep === 0 delta = 0, currentStep === 1 prevousStep === 0 delta === 0 , currentStep === 0 prevousStep === 1 delta === -1
   async function next() {
     const fileds = steps[currentStep].fields;
 
@@ -86,13 +87,35 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
     });
 
     try {
-      await signUpSeller(formData);
+      const data = await signUpSeller(formData);
+      if (data.errors) {
+        if (
+          ["Businessname", "Email", "Password"].some((key) =>
+            Object.keys(data.errors).includes(key)
+          )
+        ) {
+          prev();
+        }
+        let lastKey: string | null = null;
+        for (const [key, value] of Object.entries(data.errors)) {
+          const errorMessage = Array.isArray(value) ? value[0] : value;
+
+          setError(key as FieldName, {
+            type: "server",
+            message: errorMessage as string,
+          });
+          lastKey = key;
+        }
+        if (lastKey) {
+          setFocus(lastKey as FieldName);
+        }
+      }
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <MaxWidth className="flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <Form {...form}>
         <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
           {currentStep === 0 && (
@@ -101,11 +124,11 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 ">
                 <div className="relative hidden md:block sm:w-[430px] sm:h-[410px] lg:w-[705px] lg:h-[681px]">
                   <Image src="/sellerImage.svg" fill alt="sign-up" />
                 </div>
-                <div className="lg:max-w-[38%] border px-12 py-6 rounded-xl">
+                <div className="lg:max-w-[38%] max-md:w-full max-md:mt-12 border px-12 py-6 rounded-xl">
                   <h1 className="text-4xl">
                     Create an account as a{" "}
                     <span className="font-bold">Seller</span>
@@ -450,22 +473,28 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center md:gap-24 justify-center mt-28">
+                <div className="flex items-center gap-8 md:gap-24 justify-center mt-28">
                   <Button
                     variant="outline"
                     type="button"
-                    className="px-28"
+                    className="min-w-[101px] px-6 md:px-28"
                     onClick={prev}
                   >
                     Back
                   </Button>
-                  <Button type="submit">Confirm</Button>
+                  <LoadingButton
+                    className="min-w-[101px] px-6 md:px-28"
+                    type="submit"
+                    loading={isSubmitting}
+                  >
+                    Confirm
+                  </LoadingButton>
                 </div>
               </div>
             </motion.div>
           )}
         </form>
       </Form>
-    </MaxWidth>
+    </div>
   );
 }

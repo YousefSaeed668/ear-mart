@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function page() {
   return (
-    <div>
+    <div className="flex items-center">
       <div className="flex items-center gap-4">
         <div className="relative hidden md:block sm:w-[480px] sm:h-[460px] lg:w-[805px] lg:h-[781px]">
           <Image src="/signin.svg" fill alt="sign-up" />
