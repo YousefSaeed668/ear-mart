@@ -30,14 +30,14 @@ const signupSellerSchemaStep2 = z.object({
     .min(3)
     .max(50)
     .refine((val) => onlyLettersAndSpaces.test(val), {
-      message: "FullName can only contain letters and spaces",
+      message: "First Name can only contain letters and spaces",
     }),
   LastName: z
     .string()
     .min(3)
     .max(50)
     .refine((val) => onlyLettersAndSpaces.test(val), {
-      message: "FullName can only contain letters and spaces",
+      message: "Last Name can only contain letters and spaces",
     }),
   BusinessEmail: z.string().email(),
   PhoneNumber: z.string().min(3).max(100),
@@ -105,3 +105,10 @@ export const signupSellerSchema = z
   .and(signupSellerSchemaStep2);
 
 export type SignupSellerType = z.infer<typeof signupSellerSchema>;
+
+export const signinUser = z.object({
+  Email: z.string().email(),
+  Password: z.string().min(8).max(100),
+});
+
+export type SignInUserType = z.infer<typeof signinUser>;

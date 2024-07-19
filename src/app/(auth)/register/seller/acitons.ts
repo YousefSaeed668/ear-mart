@@ -13,7 +13,7 @@ export async function signUpSeller(formData: FormData) {
   );
 
   const data = await response.json();
-  console.log(data);
+
   if (data.Success) {
     redirect("/login");
   }
