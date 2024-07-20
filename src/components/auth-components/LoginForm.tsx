@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 
 export function LoginForm() {
   const { data: session } = useSession();
-
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const form = useForm<SignInUserType>({

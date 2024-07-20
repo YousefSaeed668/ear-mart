@@ -5,7 +5,7 @@ import { getToken } from "next-auth/jwt";
 // Define the arrays of forbidden routes
 const sellerForbiddenRoutes = ["/consumer-route1", "/consumer-route2"];
 const consumerForbiddenRoutes = ["/seller-route1", "/seller-route2"];
-const visitorForbiddenRoutes = ["/profile", "/dashboard", "/settings"];
+const visitorForbiddenRoutes = ["/seller", "/dashboard", "/settings"];
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({
@@ -15,19 +15,24 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  const isForbidden = (forbiddenRoutes: string[], path: string) =>
+    forbiddenRoutes.some((route) => path.startsWith(route));
+
   if (!token) {
-    // User is not authenticated (visitor)
-    if (visitorForbiddenRoutes.includes(pathname)) {
+    if (isForbidden(visitorForbiddenRoutes, pathname)) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   } else {
-    if (token.role === "seller" && sellerForbiddenRoutes.includes(pathname)) {
+    if (
+      token.role === "seller" &&
+      isForbidden(sellerForbiddenRoutes, pathname)
+    ) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
 
     if (
       token.role === "consumer" &&
-      consumerForbiddenRoutes.includes(pathname)
+      isForbidden(consumerForbiddenRoutes, pathname)
     ) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }

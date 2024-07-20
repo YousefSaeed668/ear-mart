@@ -68,8 +68,7 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
         setImagePreview("/pdf.png");
       } else if (
         file.type ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-        file.type === "application/docx"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       ) {
         setImagePreview("/docx.png");
       } else {
@@ -480,7 +479,7 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
                                 placeholder="Cetificate"
                                 type="file"
                                 accept={
-                                  "image/png, image/jpeg, image/jpg, application/pdf, application/docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                  "image/png, image/jpeg, image/jpg, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                 }
                               />
                             </FormControl>

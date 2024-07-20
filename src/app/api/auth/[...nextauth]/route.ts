@@ -30,7 +30,7 @@ const handler = NextAuth({
             }
           );
           const user = await response.json();
-
+          console.log(user);
           if (user?.IsAuthenticated) {
             return user;
           } else {
@@ -49,14 +49,17 @@ const handler = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      // if i want to add more data to the token
+    async jwt({ token, user, account }) {
       if (user && "Token" in user) {
         const decodedToken = parseJwt(user.Token as string);
         return {
           ...token,
           ...decodedToken,
           token: user.Token,
+          email: decodedToken.email,
+          name: decodedToken.FullName,
+          IsAuthenticated: user.IsAuthenticated,
+          Message: user.Message,
         };
       }
       return token;
@@ -64,10 +67,13 @@ const handler = NextAuth({
     async session({ session, token }) {
       session.user = {
         ...session.user,
+        email: token.email,
+        name: token.name,
         IsAuthenticated: token.IsAuthenticated,
         Message: token.Message,
         roles: token.roles,
         Token: token.token,
+        uid: token.uid,
       };
       return session;
     },

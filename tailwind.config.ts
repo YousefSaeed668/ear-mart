@@ -18,9 +18,16 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        inter: "var(--font-inter)",
+        poppins: "var(--font-poppins)",
+      },
       colors: {
         primaryColor: "#00693D",
         secondaryColor: "#00965A",
+        lightGrayColor: "#F9FAFB",
+        darkGrayColor: "#E5E7EB",
+        darkBlueColor: "#111827 ",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

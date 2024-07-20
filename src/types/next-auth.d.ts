@@ -7,6 +7,7 @@ declare module "next-auth" {
       Message: string;
       roles: string;
       Token: string;
+      uid: string;
     } & DefaultSession["user"];
   }
   interface User {
@@ -23,5 +24,6 @@ declare module "next-auth/jwt" {
     Message: string;
     roles: string;
     token: string;
+    uid: string;
   }
 }

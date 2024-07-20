@@ -11,22 +11,22 @@ export function MobileNav() {
       <SheetContent>
         <ul className="flex flex-col gap-4 uppercase mt-10">
           <li>
-            <Link href="#">Home</Link>
+            <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="#">Shop</Link>
+            <Link href="/shop">Shop</Link>
           </li>
           <li>
-            <Link href="#">Editorial</Link>
+            <Link href="/editorial">Editorial</Link>
           </li>
           <li>
-            <Link href="#">About</Link>
+            <Link href="/about">About</Link>
           </li>
           <li>
-            <Link href="#">Login</Link>
+            <Link href="/login">Login</Link>
           </li>
           <li>
-            <Link href="#">Register</Link>
+            <Link href="/register">Register</Link>
           </li>
           <li>
             <form className="relative ">
