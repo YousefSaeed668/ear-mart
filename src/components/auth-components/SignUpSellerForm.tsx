@@ -5,9 +5,9 @@ import { signupSellerSchema, SignupSellerType } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -15,11 +15,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { AuthInput } from "./AuthInput";
+} from "../ui/form";
+import { AuthInput } from "../AuthInput";
 import Link from "next/link";
 import { ChevronUp } from "lucide-react";
-import LoadingButton from "./LoadingButton";
+import LoadingButton from "../LoadingButton";
 
 motion;
 const steps = [
@@ -48,6 +48,7 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
   const [prevousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const delta = currentStep - prevousStep;
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const form = useForm<SignupSellerType>({
     resolver: zodResolver(signupSellerSchema),
   });
@@ -58,8 +59,26 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
     setError,
     setFocus,
     formState: { isSubmitting },
+    watch,
   } = form;
-
+  const file = watch("Certificate");
+  useEffect(() => {
+    if (file) {
+      if (file.type === "application/pdf") {
+        setImagePreview("/pdf.png");
+      } else if (
+        file.type ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        file.type === "application/docx"
+      ) {
+        setImagePreview("/docx.png");
+      } else {
+        const previewURL = URL.createObjectURL(file);
+        setImagePreview(previewURL);
+        return () => URL.revokeObjectURL(previewURL);
+      }
+    }
+  }, [file]);
   type FieldName = keyof SignupSellerType;
   async function next() {
     const fileds = steps[currentStep].fields;
@@ -114,6 +133,7 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
       console.log(error);
     }
   };
+
   return (
     <div className="flex items-center justify-center">
       <Form {...form}>
@@ -420,6 +440,20 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
                       </span>
                     </h2>
                     <div className="space-y-10">
+                      {imagePreview && (
+                        <div className="flex flex-col gap-2 justify-center items-center w-[200px] h-[250px] ">
+                          <Image
+                            src={imagePreview}
+                            width={200}
+                            height={250}
+                            alt="certificate"
+                            className="rounded-md border shadow-sm "
+                          />
+                          <span className="text-xs font-bold">
+                            {watch("Certificate").name}
+                          </span>
+                        </div>
+                      )}
                       <FormField
                         control={control}
                         name="Certificate"
@@ -446,7 +480,7 @@ export function SignUpSellerForm({ Role }: { Role: string }) {
                                 placeholder="Cetificate"
                                 type="file"
                                 accept={
-                                  "image/png, image/jpeg, image/jpg, application/pdf, application/docx"
+                                  "image/png, image/jpeg, image/jpg, application/pdf, application/docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                 }
                               />
                             </FormControl>

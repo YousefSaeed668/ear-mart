@@ -6,7 +6,7 @@ const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
   "image/jpg",
   "application/pdf",
-  "application/docx",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 const onlyLettersAndSpaces = /^[a-zA-Z\s]*$/;
 export const signupUserSchema = z.object({

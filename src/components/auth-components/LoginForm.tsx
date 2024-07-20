@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { AuthInput } from "./AuthInput";
+import { AuthInput } from "../AuthInput";
 import { useForm } from "react-hook-form";
 import { signinUser, SignInUserType } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import LoadingButton from "./LoadingButton";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
+import LoadingButton from "../LoadingButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 

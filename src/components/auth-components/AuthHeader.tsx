@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { MaxWidth } from "./MaxWidth";
 import Image from "next/image";
-import { MobileNav } from "./MobileNav";
+import { MaxWidth } from "../MaxWidth";
+import { MobileNav } from "../MobileNav";
 
 export function AuthHeader() {
   return (

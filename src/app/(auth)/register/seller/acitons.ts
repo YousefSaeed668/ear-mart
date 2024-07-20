@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 export async function signUpSeller(formData: FormData) {
+  console.log("formData", formData);
   formData.append("Role", "Seller");
   const response = await fetch(
     "http://ear-mart.runasp.net/api/Auth/RegisterSeller",

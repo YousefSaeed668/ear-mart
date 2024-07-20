@@ -5,7 +5,7 @@ import { Heart, Search, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { MobileNav } from "./MobileNav";
 import { useSession } from "next-auth/react";
-import { UserButton } from "./UserButton";
+import { UserButton } from "./auth-components/UserButton";
 
 export function MainHeader() {
   const { data: session, status } = useSession();

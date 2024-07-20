@@ -1,4 +1,4 @@
-import { AuthHeader } from "@/components/AuthHeader";
+import { AuthHeader } from "@/components/auth-components/AuthHeader";
 import { MaxWidth } from "@/components/MaxWidth";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

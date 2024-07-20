@@ -1,13 +1,13 @@
 "use client";
 
-import { SubmitButton } from "./SubmitButton";
-import { Button } from "./ui/button";
+import { SubmitButton } from "../SubmitButton";
+import { Button } from "../ui/button";
 import { useFormState } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { registerCustomer } from "@/app/(auth)/register/consumer/actions";
 import { useEffect, useRef } from "react";
-import { AuthInput } from "./AuthInput";
+import { AuthInput } from "../AuthInput";
 
 const initalState = {
   message: "",
