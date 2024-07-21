@@ -13,7 +13,7 @@ export function Sidebar() {
   //TODO: Add loading Skeleton
   if (status === "loading") return null;
   return (
-    <div className="bg-lightGrayColor shadow-md px-5 py-6 h-screen  flex-col justify-between hidden md:flex font-poppins font-medium">
+    <div className="bg-lightGrayColor shadow-md px-5 py-6 h-full flex-col justify-between hidden md:flex font-poppins font-medium">
       <div className="flex mb-10 justify-center">
         <Image src="/logo1.svg" width={100} height={100} alt="logo" />
       </div>

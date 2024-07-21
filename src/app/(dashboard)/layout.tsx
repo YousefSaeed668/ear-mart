@@ -6,6 +6,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <div className="grid max-md:relative md:grid-cols-[250px,1fr] h-screen">
       <Sidebar />
       <MobileSidebar />
+      <div className="px-5 py-10 md:px-6 md:py-12">{children}</div>
     </div>
   );
 }

@@ -112,3 +112,21 @@ export const signinUser = z.object({
 });
 
 export type SignInUserType = z.infer<typeof signinUser>;
+
+const ProductSpecificationSchema = z.object({
+  Discount: z.boolean().default(false),
+  DiscountPercent: z.string().optional(),
+  Color: z.string(),
+  Size: z.string(),
+  Price: z.string(),
+  StockQuantity: z.string(),
+});
+
+export const createProductFormSchema = z.object({
+  ProductTitle: z.string(),
+  SubTitle: z.string().optional(),
+  ProductDescription: z.string(),
+  ProductVariants: z.array(ProductSpecificationSchema),
+});
+
+export type createProductFormType = z.infer<typeof createProductFormSchema>;

@@ -28,6 +28,7 @@ const config = {
         lightGrayColor: "#F9FAFB",
         darkGrayColor: "#E5E7EB",
         darkBlueColor: "#111827 ",
+        textGrayColor: "#9F9F9F ",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
