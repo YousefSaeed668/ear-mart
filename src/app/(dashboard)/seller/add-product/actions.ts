@@ -1,6 +1,6 @@
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { createProductFormType } from "@/lib/validation";
 import { getServerSession } from "next-auth";
 type UploadedImage = {
