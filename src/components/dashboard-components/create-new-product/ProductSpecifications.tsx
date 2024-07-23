@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { createProductFormType } from "@/lib/validation";
+import { createProductFormType, predefinedColors } from "@/lib/validation";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { SpecificationsTableInput } from "./SpecificationsTableInput";
@@ -49,7 +49,7 @@ export function ProductSpecifications({
                   Available quantity <span className="text-[#F43F5E]">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="StockQuantity" {...field} type="text" />
+                  <Input placeholder="Stock Quantity" {...field} type="text" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -109,7 +109,7 @@ export function ProductSpecifications({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Business Name"
+                    placeholder="Make An offer"
                     disabled={!isDiscountChecked}
                     {...field}
                     type="text"

@@ -12,10 +12,12 @@ interface FileWithPreview {
 }
 interface UploadImagesProps {
   onOrderChange: (files: File[]) => void;
+  error?: string;
 }
-export function UploadImages({ onOrderChange }: UploadImagesProps) {
+export function UploadImages({ onOrderChange, error }: UploadImagesProps) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [order, setOrder] = useState<string[]>([]);
+
   useEffect(() => {
     const orderedFiles = order
       .map((id) => files.find((f) => f.id === id)?.file)
@@ -38,7 +40,6 @@ export function UploadImages({ onOrderChange }: UploadImagesProps) {
   }, []);
 
   useEffect(() => {
-    // Cleanup function to revoke object URLs
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
 
@@ -53,6 +54,14 @@ export function UploadImages({ onOrderChange }: UploadImagesProps) {
 
   return (
     <div className="mt-10">
+      {error && (
+        <div
+          className="bg-red-100 mb-10 border border-red-400 text-red-700 px-4 py-3 rounded "
+          role="alert"
+        >
+          <strong className="font-bold">{error}</strong>
+        </div>
+      )}
       <div
         {...getRootProps()}
         className="border-dashed border-4 flex items-center justify-center py-6 rounded-lg min-h-[112px]"
@@ -68,53 +77,56 @@ export function UploadImages({ onOrderChange }: UploadImagesProps) {
           </p>
         )}
       </div>
-      <aside className="mt-6">
-        <h4 className="font-semibold">Uploads</h4>
-        <p className="text-textGrayColor">
-          First Image Will Be The Product Thumbnail{" "}
-        </p>
-        <Reorder.Group
-          axis="y"
-          values={order}
-          onReorder={setOrder}
-          className="flex flex-col gap-4 mt-6"
-        >
-          {order.map((id) => {
-            const file = files.find((f) => f.id === id);
-            if (!file) return null;
-            return (
-              <Reorder.Item
-                key={id}
-                value={id}
-                className="flex items-center gap-2"
-              >
-                <GripVertical className="cursor-move" />
-                <motion.div layoutId={`image-${id}`}>
-                  <Image
-                    src={file.preview}
-                    alt={file.file.name}
-                    className="object-cover rounded-lg"
-                    width={64}
-                    height={64}
+      {files.length > 0 && (
+        <aside className="mt-6">
+          <h4 className="font-semibold">Uploads</h4>
+          <p className="text-textGrayColor">
+            First Image Will Be The Product Thumbnail{" "}
+          </p>
+          <Reorder.Group
+            axis="y"
+            values={order}
+            onReorder={setOrder}
+            className="flex flex-col gap-4 mt-6"
+          >
+            {order.map((id) => {
+              const file = files.find((f) => f.id === id);
+              if (!file) return null;
+              return (
+                <Reorder.Item
+                  key={id}
+                  value={id}
+                  className="flex items-center gap-2"
+                >
+                  <GripVertical className="cursor-move" />
+                  <motion.div layoutId={`image-${id}`}>
+                    <Image
+                      src={file.preview}
+                      alt={file.file.name}
+                      className="object-cover rounded-lg"
+                      width={64}
+                      height={64}
+                      style={{ width: "64px", height: "64px" }}
+                    />
+                  </motion.div>
+                  <div className="flex flex-col gap-1 flex-grow">
+                    <span className="text-sm font-semibold">
+                      {file.file.name}
+                    </span>
+                    <span className="text-textGrayColor">
+                      {formatFileSize(file.file.size)}
+                    </span>
+                  </div>
+                  <X
+                    className="h-4 w-4 text-textGrayColor cursor-pointer"
+                    onClick={() => removeFile(id)}
                   />
-                </motion.div>
-                <div className="flex flex-col gap-1 flex-grow">
-                  <span className="text-sm font-semibold">
-                    {file.file.name}
-                  </span>
-                  <span className="text-textGrayColor">
-                    {formatFileSize(file.file.size)}
-                  </span>
-                </div>
-                <X
-                  className="h-4 w-4 text-textGrayColor cursor-pointer"
-                  onClick={() => removeFile(id)}
-                />
-              </Reorder.Item>
-            );
-          })}
-        </Reorder.Group>
-      </aside>
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
+        </aside>
+      )}
     </div>
   );
 }

@@ -113,21 +113,64 @@ export const signinUser = z.object({
 
 export type SignInUserType = z.infer<typeof signinUser>;
 
+const hexColorPattern = /^#([0-9A-F]{3}|[0-9A-F]{6})$/i;
+
+export const predefinedColors = [
+  "Red",
+  "Green",
+  "Blue",
+  "Yellow",
+  "Black",
+  "White",
+  "Gray",
+  "Orange",
+  "Purple",
+  "Brown",
+  "Pink",
+  "Cyan",
+  "Magenta",
+  "Lime",
+  "Indigo",
+  "Violet",
+  "Teal",
+  "Maroon",
+  "Navy",
+  "Olive",
+  "Beige",
+  "Turquoise",
+  "Gold",
+  "Silver",
+  "Bronze",
+].map((color) => color.toLowerCase());
+
 const ProductSpecificationSchema = z.object({
   Discount: z.boolean().default(false),
   DiscountPercent: z.string().optional(),
-  Color: z.string(),
+  Color: z.string().refine(
+    (value) => {
+      const lowerValue = value.toLowerCase();
+
+      return (
+        predefinedColors.includes(lowerValue) || hexColorPattern.test(value)
+      );
+    },
+    {
+      message:
+        "The color is not acceptable. click on “Color Examples” to see the correct colors",
+    }
+  ),
+
   Size: z.string(),
   Price: z.string(),
   StockQuantity: z.string(),
 });
 
 export const createProductFormSchema = z.object({
-  ProductTitle: z.string(),
+  ProductTitle: z.string().min(3).max(100),
   SubTitle: z.string().optional(),
-  ProductDescription: z.string(),
+  ProductDescription: z.string().min(100).max(5000),
   ProductVariants: z.array(ProductSpecificationSchema),
-  Category: z.string(),
+  CategoryName: z.string(),
   Files: z.array(z.instanceof(File)),
   SubCategoryNames: z.array(z.string()),
 });

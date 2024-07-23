@@ -47,6 +47,11 @@ export function SpecificationsTableInput({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
+          onBlur={() => {
+            setBadge(inputValue);
+            setValue(name, inputValue);
+            setInputValue("");
+          }}
         />
       )}
     </div>

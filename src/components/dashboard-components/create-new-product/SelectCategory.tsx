@@ -19,7 +19,7 @@ import {
 
 export function SelectCategory() {
   const [categories, setCategories] = useState<Category[]>();
-  const {  control } = useFormContext();
+  const { control } = useFormContext();
   useEffect(() => {
     async function getCategories() {
       try {
@@ -33,7 +33,7 @@ export function SelectCategory() {
   return (
     <FormField
       control={control}
-      name="Category"
+      name="CategoryName"
       render={({ field }) => (
         <FormItem>
           <FormControl>

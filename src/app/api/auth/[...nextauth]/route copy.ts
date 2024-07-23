@@ -1,11 +1,10 @@
-import NextAuth, { NextAuthOptions, User } from "next-auth";
+import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 function parseJwt(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
-
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -50,7 +49,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user && "Token" in user) {
         const decodedToken = parseJwt(user.Token as string);
         return {
@@ -79,8 +78,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-};
-
-const handler = NextAuth(authOptions);
+});
 
 export { handler as GET, handler as POST };

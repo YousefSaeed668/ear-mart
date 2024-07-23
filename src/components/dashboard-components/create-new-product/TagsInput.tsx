@@ -99,6 +99,11 @@ function Tags({ placeholder, value, onChange }: TagsProps) {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
+        onBlur={() => {
+          if (inputValue.trim()) {
+            addValue(inputValue.trim());
+          }
+        }}
       />
     </div>
   );

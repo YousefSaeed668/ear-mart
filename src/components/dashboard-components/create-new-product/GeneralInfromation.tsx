@@ -11,7 +11,7 @@ import { useFormContext } from "react-hook-form";
 import { QuillEditor } from "../QuillEditor";
 
 export function GeneralInfromation() {
-  const { register, control, watch } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <>
@@ -25,7 +25,7 @@ export function GeneralInfromation() {
                 Title <span className="text-[#F43F5E]">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Business Name" {...field} type="text" />
+                <Input placeholder="Product Title" {...field} type="text" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -38,7 +38,7 @@ export function GeneralInfromation() {
             <FormItem>
               <FormLabel>Subtitle</FormLabel>
               <FormControl>
-                <Input placeholder="Business Name" {...field} type="text" />
+                <Input placeholder="Product Subtitle" {...field} type="text" />
               </FormControl>
 
               <FormMessage />
