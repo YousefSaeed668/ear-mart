@@ -3,7 +3,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { DashboardCard } from "../DashboardCard";
 import { GeneralInfromation } from "./GeneralInfromation";
 import { Form } from "@/components/ui/form";
-import { Ban, CircleMinus, ShieldX } from "lucide-react";
+import { CircleMinus, ShieldX } from "lucide-react";
 
 import { ProductSpecifications } from "./ProductSpecifications";
 import { CirclePlus } from "lucide-react";
