@@ -127,6 +127,9 @@ export const createProductFormSchema = z.object({
   SubTitle: z.string().optional(),
   ProductDescription: z.string(),
   ProductVariants: z.array(ProductSpecificationSchema),
+  Category: z.string(),
+  Files: z.array(z.instanceof(File)),
+  SubCategoryNames: z.array(z.string()),
 });
 
 export type createProductFormType = z.infer<typeof createProductFormSchema>;

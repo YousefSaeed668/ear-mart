@@ -11,7 +11,6 @@ import { Switch } from "@/components/ui/switch";
 import { createProductFormType } from "@/lib/validation";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { TagsInput } from "./TagsInput";
 import { SpecificationsTableInput } from "./SpecificationsTableInput";
 
 export function ProductSpecifications({

@@ -1,60 +1,104 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, KeyboardEvent } from "react";
+import { useFormContext } from "react-hook-form";
 
-interface TagsInputProps {
+export function TagsInput() {
+  const { control } = useFormContext();
+
+  return (
+    <FormField
+      control={control}
+      name="SubCategoryNames"
+      render={({ field }) => (
+        <FormItem className="w-full md:w-[40%] ">
+          <FormLabel>
+            Sub Categories <span className="text-[#F43F5E]">*</span>
+          </FormLabel>
+          <FormControl>
+            <Tags
+              placeholder="Add sub category"
+              value={field.value || []}
+              onChange={(newValue) => field.onChange(newValue)}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
+interface TagsProps {
   placeholder: string;
   value: string[];
-  onChange: (value: string) => void;
-  onRemove: (value: string) => void;
+  onChange: (value: string[]) => void;
 }
-export function TagsInput({
-  placeholder,
-  value,
-  onChange,
-  onRemove,
-}: TagsInputProps) {
+
+function Tags({ placeholder, value, onChange }: TagsProps) {
   const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const addValue = (item: string) => {
-    onChange(item);
+    if (!value.includes(item)) {
+      onChange([...value, item]);
+    }
     setInputValue("");
   };
+
+  const removeValue = (item: string) => {
+    onChange(value.filter((val) => val !== item));
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      e.preventDefault();
+      addValue(inputValue.trim());
+    } else if (e.key === "Backspace" && !inputValue && value.length > 0) {
+      removeValue(value[value.length - 1]);
+    }
+  };
+
   return (
-    <div className="flex items-center ">
-      <div className="flex gap-1 flex-wrap flex-grow max-w-80">
-        {value.map((item, index) => (
-          <Badge
-            key={index}
-            className="text-white bg-darkBlueColor text-base rounded-md px-1.5"
+    <div
+      className="flex flex-wrap items-center border rounded-md p-2 focus-within:ring-4  focus-within:ring-primaryColor focus-within:ring-offset-0 min-h-[40px] overflow-x-auto"
+      onClick={() => inputRef.current?.focus()}
+    >
+      {value.map((item, index) => (
+        <Badge
+          key={index}
+          className="bg-darkBlueColor text-white m-1 text-sm flex-shrink-0 rounded-lg"
+        >
+          {item}
+          <button
+            type="button"
+            className="ml-1 text-white hover:text-gray-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              removeValue(item);
+            }}
           >
-            {item}
-            <button
-              type="button"
-              className="ml-2 rounded-full outline-none p-0 h-fit "
-              onClick={() => onRemove(item)}
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </Badge>
-        ))}
-      </div>
+            <X className="h-3 w-3" />
+          </button>
+        </Badge>
+      ))}
       <Input
-        className="border-none rounded-none  bg-transparent focus-visible:ring-0  focus-visible:ring-offset-0"
-        placeholder={placeholder}
-        onChange={(e) => setInputValue(e.target.value)}
+        ref={inputRef}
+        className="flex-grow border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm min-w-[50px]"
+        placeholder={value.length === 0 ? placeholder : ""}
         value={inputValue}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            if (inputValue.trim().length > 0) {
-              addValue(inputValue);
-            }
-            return;
-          }
-        }}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
     </div>
   );

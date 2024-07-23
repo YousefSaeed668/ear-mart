@@ -12,7 +12,12 @@ import {
   createProductFormType,
 } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SelectCategory } from "./SelectCategory";
+import { UploadImages } from "./UploadImages";
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { TagsInput } from "./TagsInput";
+import { Separator } from "@/components/ui/separator";
 
 export function CreateNewProductForm() {
   const form = useForm<createProductFormType>({
@@ -21,8 +26,14 @@ export function CreateNewProductForm() {
   const {
     handleSubmit,
     formState: { isSubmitting },
+    setValue,
   } = form;
-
+  const handleFileOrderChange = useCallback(
+    (orderedFiles: File[]) => {
+      setValue("Files", orderedFiles);
+    },
+    [setValue]
+  );
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "ProductVariants",
@@ -88,9 +99,18 @@ export function CreateNewProductForm() {
               }
             />
           </div>
-          <Button type="submit" className="mx-auto">
-            Submit
-          </Button>
+          <Separator className="my-6" />
+          <div className="flex justify-between flex-wrap items-center mt-10">
+            <TagsInput />
+            <div className="flex gap-4 items-center mt-12">
+              <h2 className="text-xl font-semibold">
+                Select Product Category :
+              </h2>
+              <SelectCategory />
+            </div>
+          </div>
+          <UploadImages onOrderChange={handleFileOrderChange} />
+          <Button type="submit">Submit</Button>
         </form>
       </Form>
     </DashboardCard>

@@ -184,3 +184,7 @@ input.google:focus ~ .highlight {
     background: transparent;
   }
 }
+
+.ql-container {
+  height: 200px !important;
+}

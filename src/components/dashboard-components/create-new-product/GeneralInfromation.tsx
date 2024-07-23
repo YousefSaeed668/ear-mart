@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
+import { QuillEditor } from "../QuillEditor";
 
 export function GeneralInfromation() {
   const { register, control, watch } = useFormContext();
@@ -53,7 +54,10 @@ export function GeneralInfromation() {
                 Description <span className="text-[#F43F5E]">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Business Name" {...field} type="text" />
+                <QuillEditor
+                  value={field.value}
+                  onChange={(value) => field.onChange(value)}
+                />
               </FormControl>
               <FormDescription>
                 Give your product a short and clear title. <br />
