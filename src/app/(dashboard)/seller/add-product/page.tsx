@@ -1,5 +1,13 @@
-import { CreateNewProductForm } from "@/components/dashboard-components/create-new-product/CreateNewProductForm";
 import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+
+const CreateNewProductForm = dynamic(
+  () =>
+    import(
+      "@/components/dashboard-components/create-new-product/CreateNewProductForm"
+    ),
+  { ssr: false }
+);
 
 export default function page() {
   return (

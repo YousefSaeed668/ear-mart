@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { TagsInput } from "./TagsInput";
 import { Separator } from "@/components/ui/separator";
 
-export function CreateNewProductForm() {
+export default function CreateNewProductForm() {
   const form = useForm<createProductFormType>({
     resolver: zodResolver(createProductFormSchema),
   });
