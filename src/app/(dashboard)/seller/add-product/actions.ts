@@ -30,7 +30,7 @@ export async function createNewProduct(data: ServerActionData) {
   };
 
   const response = await fetch(
-    "http://ear-mart.runasp.net/api/Product/CreateProduct",
+    "https://ear-mart.runasp.net/api/Product/CreateProduct",
     {
       method: "POST",
       headers: {
