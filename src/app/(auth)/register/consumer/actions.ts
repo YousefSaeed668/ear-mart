@@ -17,7 +17,7 @@ export async function registerCustomer(
       path: result.error.issues[0].path[0],
     };
   }
-  const respond = await fetch("http://ear-mart.runasp.net/api/Auth/Register", {
+  const respond = await fetch("https://ear-mart.runasp.net/api/Auth/Register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

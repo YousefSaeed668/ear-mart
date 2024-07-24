@@ -6,7 +6,7 @@ export async function signUpSeller(formData: FormData) {
   console.log("formData", formData);
   formData.append("Role", "Seller");
   const response = await fetch(
-    "http://ear-mart.runasp.net/api/Auth/RegisterSeller",
+    "https://ear-mart.runasp.net/api/Auth/RegisterSeller",
     {
       method: "POST",
       body: formData,
