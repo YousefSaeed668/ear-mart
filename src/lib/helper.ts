@@ -6,7 +6,7 @@ export async function uploadFiles(files: File[]) {
   });
 
   const response = await fetch(
-    "https://ear-mart.runasp.net/api/File/UploadeFiles",
+    "http://ear-mart.runasp.net/api/File/UploadeFiles",
     {
       method: "POST",
       body: formData,
