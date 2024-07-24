@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         try {
           const response = await fetch(
-            "http://ear-mart.runasp.net/api/Auth/Login",
+            "https://ear-mart.runasp.net/api/Auth/Login",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
