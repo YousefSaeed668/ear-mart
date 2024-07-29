@@ -55,19 +55,24 @@ export async function getSellerProducts(
       },
     }
   );
-  if (response.status === 404) {
-    return {
-      Items: [],
-      PageNumber: 0,
-      PageSize: 0,
-      TotalPages: 0,
-      TotalItems: 0,
-    };
-  }
   if (!response.ok) {
-    throw new Error(`Error fetching products: ${response.statusText}`);
+    return {
+      success: false,
+      data: {
+        Items: [],
+        PageNumber: 0,
+        PageSize: 0,
+        TotalPages: 0,
+        TotalItems: 0,
+      },
+      message: response.statusText,
+    };
   }
   const data: ProductsResponse = await response.json();
 
-  return data;
+  return {
+    success: true,
+    data,
+    message: "Products fetched successfully",
+  };
 }

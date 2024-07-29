@@ -1,7 +1,6 @@
 "use client";
 import { useGetSellerProducts } from "@/data/get-seller-products";
 import { DashboardCard } from "./DashboardCard";
-
 import {
   Accordion,
   AccordionContent,
@@ -9,23 +8,39 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Separator } from "../ui/separator";
-import { Edit } from "lucide-react";
+import { AlertCircle, Edit } from "lucide-react";
 import Link from "next/link";
 import { Pagination } from "../Pagination";
-import { FilterSellerProducts } from "./FilterSellerProducts";
-import { Button } from "../ui/button";
 import { Fragment } from "react";
+import { Skeleton } from "../ui/skeleton";
+import { Button } from "../ui/button";
 
 export function SellerProductsTable() {
   const { data, isPending } = useGetSellerProducts();
-
   if (isPending) {
-    //Todo : Add a loading Skelton
-    return <DashboardCard className="px-6 py-4">Loading...</DashboardCard>;
-  }
-  if (data?.Items.length === 0)
     return (
-      <DashboardCard className="px-6 py-4">{"No Product Found"}</DashboardCard>
+      <DashboardCard className="px-6 py-4">
+        <ProductListSkeleton />
+      </DashboardCard>
+    );
+  }
+
+  if (!data?.success)
+    return (
+      <DashboardCard className="px-6 py-4">
+        <div className="w-full p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+            <AlertCircle className="w-8 h-8 text-red-600" />
+          </div>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Oops!</h2>
+          <p className="text-gray-600 mb-4">{data?.message}</p>
+          <Button className="px-4 py-2  rounded-md  transition-colors" asChild>
+            <Link href="/seller/products" className="uppercase">
+              Reset Filters
+            </Link>
+          </Button>
+        </div>
+      </DashboardCard>
     );
   return (
     <div className="w-full max-[1100px]:w-fit">
@@ -42,7 +57,7 @@ export function SellerProductsTable() {
           <div className="text-textGrayColor">Edit</div>
           <Separator className="col-span-9" />
           <Accordion type="single" collapsible className="col-span-9">
-            {data?.Items.map((product) => (
+            {data?.data.Items.map((product) => (
               <AccordionItem
                 value={`product-${product.ProductId}`}
                 key={product.ProductId}
@@ -98,10 +113,68 @@ export function SellerProductsTable() {
         </div>
       </DashboardCard>
       <Pagination
-        numberOfResults={data?.TotalItems}
-        numberOfPages={data?.TotalPages}
-        currentPage={data?.PageNumber}
+        numberOfResults={data?.data?.TotalItems}
+        numberOfPages={data?.data.TotalPages}
+        currentPage={data?.data.PageNumber}
       />
     </div>
   );
 }
+const ProductListSkeleton = () => {
+  return (
+    <div className="w-full max-[1100px]:w-fit">
+      <div className="font-poppins min-h-screen">
+        <div className="grid grid-cols-[30px,1fr,1fr,1fr,1fr,1fr,1fr,1fr,1fr] gap-4 p-4 min-w-[800px]">
+          <div></div>
+          <div className="text-textGrayColor">Product ID</div>
+          <div className="text-textGrayColor">Product Name</div>
+          <div className="text-textGrayColor">Price</div>
+          <div className="text-textGrayColor">Offers</div>
+          <div className="text-textGrayColor">Inventory</div>
+          <div className="text-textGrayColor">Status</div>
+          <div className="text-textGrayColor">Category</div>
+          <div className="text-textGrayColor">Edit</div>
+          <Separator className="col-span-9" />
+          <Accordion type="single" collapsible className="col-span-9 w-full">
+            {[...Array(8)].map((_, index) => (
+              <AccordionItem value={`skeleton-${index}`} key={index}>
+                <AccordionTrigger className="py-6 w-full grid grid-cols-[30px,1fr,1fr,1fr,1fr,1fr,1fr,1fr,1fr] gap-4 col-span-9 text-start font-medium">
+                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-12" />
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-4" />
+                </AccordionTrigger>
+                <AccordionContent className="mt-6 text-base">
+                  <Skeleton className="h-6 w-3/4 mb-4" />
+                  <Skeleton className="h-6 w-1/2 mb-3" />
+                  <div className="border mt-3 grid grid-cols-4 p-5 rounded-lg">
+                    <Skeleton className="h-4 w-20 mb-3" />
+                    <Skeleton className="h-4 w-16 mb-3" />
+                    <Skeleton className="h-4 w-16 mb-3" />
+                    <Skeleton className="h-4 w-24 mb-3" />
+                    <Separator className="col-span-4" />
+                    {[...Array(3)].map((_, variantIndex) => (
+                      <Fragment key={variantIndex}>
+                        <Skeleton className="h-4 w-16 my-3" />
+                        <Skeleton className="h-4 w-12 my-3" />
+                        <Skeleton className="h-4 w-16 my-3" />
+                        <Skeleton className="h-4 w-12 my-3" />
+                      </Fragment>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </div>
+      <div className="flex justify-center mt-4">
+        <Skeleton className="h-10 w-64" />
+      </div>
+    </div>
+  );
+};

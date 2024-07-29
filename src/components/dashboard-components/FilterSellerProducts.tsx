@@ -9,67 +9,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
 import { useDebounce } from "use-debounce";
 
-type Status = "all" | "accepted" | "pending" | "rejected";
-type Stock = "all" | "in-stock" | "out-of-stock";
-
 export function FilterSellerProducts() {
+  const searchParamsHook = useSearchParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [debouncedSearch] = useDebounce(search, 300);
-
-  const [status, setStatus] = useState<Status | "">(
-    (searchParams.get("status") as Status) || ""
-  );
-  const [stock, setStock] = useState<Stock | "">(
-    (searchParams.get("stock") as Stock) || ""
-  );
-
-  const updateURL = useCallback(() => {
-    const params = new URLSearchParams(searchParams);
-
-    if (debouncedSearch) {
-      params.set("search", debouncedSearch);
-      params.set("page", "1");
-    } else {
-      params.delete("search");
-    }
-
-    if (status && status === "all") {
-      params.delete("status");
-      params.set("page", "1");
-    } else {
-      params.set("status", status);
-    }
-
-    if (stock && stock === "all") {
-      params.delete("stock");
-      params.set("page", "1");
-    } else {
-      params.set("stock", stock);
-    }
-
-    const queryString = params.toString();
-    router.push(queryString ? `?${queryString}` : "", { scroll: false });
-  }, [debouncedSearch, status, stock, router, searchParams]);
-
+  const [params, setParams] = useState({
+    search: searchParamsHook.get("search") || "",
+    status: searchParamsHook.get("status") || "",
+    stock: searchParamsHook.get("stock") || "",
+  });
+  const [debouncedSearch] = useDebounce(params.search, 300);
   useEffect(() => {
-    updateURL();
-  }, [updateURL]);
-
-  const handleStatusChange = (value: Status) => {
-    setStatus(value === "all" ? "" : value);
-  };
-
-  const handleStockChange = (value: Stock) => {
-    setStock(value === "all" ? "" : value);
-  };
-
+    const searchParams = new URLSearchParams({
+      ...(debouncedSearch && { search: debouncedSearch.trim() }),
+      ...(params.status &&
+        params.status !== "all" && { status: params.status }),
+      ...(params.stock && params.stock !== "all" && { stock: params.stock }),
+    });
+    router.push(`?${searchParams.toString()}`);
+  }, [params, debouncedSearch, router]);
   return (
     <div>
       <h1 className="text-2xl md:text-4xl mb-4 font-bold">Product list</h1>
@@ -85,13 +46,26 @@ export function FilterSellerProducts() {
             id="search"
             className="w-full pl-32 pr-10"
             placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={params.search}
+            onChange={(e) =>
+              setParams((prevState) => ({
+                ...prevState,
+                search: e.target.value,
+              }))
+            }
           />
           <Search className="absolute top-1/2 -translate-y-1/2 right-2 text-textGrayColor" />
         </div>
 
-        <Select onValueChange={handleStatusChange} value={status || "all"}>
+        <Select
+          onValueChange={(value) =>
+            setParams((prevState) => ({
+              ...prevState,
+              status: value,
+            }))
+          }
+          value={params.status}
+        >
           <SelectTrigger className="w-[250px] sm:w-[300px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
@@ -102,7 +76,15 @@ export function FilterSellerProducts() {
             <SelectItem value="rejected">Rejected</SelectItem>
           </SelectContent>
         </Select>
-        <Select onValueChange={handleStockChange} value={stock || "all"}>
+        <Select
+          onValueChange={(value) =>
+            setParams((prevState) => ({
+              ...prevState,
+              stock: value,
+            }))
+          }
+          value={params.stock}
+        >
           <SelectTrigger className="w-[250px] sm:w-[300px]">
             <SelectValue placeholder="Stock" />
           </SelectTrigger>
