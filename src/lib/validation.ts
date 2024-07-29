@@ -156,7 +156,7 @@ const ProductSpecificationSchema = z.object({
     },
     {
       message:
-        "The color is not acceptable. click on “Color Examples” to see the correct colors",
+        "The color is not acceptable. see the color examples above this table",
     }
   ),
 
@@ -166,7 +166,7 @@ const ProductSpecificationSchema = z.object({
 });
 
 export const createProductFormSchema = z.object({
-  ProductTitle: z.string().min(3).max(100),
+  ProductTitle: z.string().min(3).max(150),
   SubTitle: z.string().optional(),
   ProductDescription: z.string().min(100).max(5000),
   ProductVariants: z.array(ProductSpecificationSchema),

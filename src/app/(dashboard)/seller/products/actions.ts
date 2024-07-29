@@ -23,6 +23,7 @@ interface Product {
   CategoryName: string;
   SubCategoryNames: string[];
   ProductVariants: ProductVariant[];
+  ProductStatus: string;
   Files: File[];
 }
 

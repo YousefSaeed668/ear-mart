@@ -30,7 +30,7 @@ export default async function page({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex items-start justify-between w-full mb-5 mt-10 min-w-[800px]">
         <FilterSellerProducts />
-        <Button asChild>
+        <Button asChild className="py-6">
           <Link href="/seller/add-product" className="uppercase">
             Add New Product
           </Link>

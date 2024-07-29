@@ -3,7 +3,7 @@ import { Sidebar } from "@/components/dashboard-components/Sidebar";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid max-md:relative md:grid-cols-[250px,1fr] h-screen">
+    <div className="grid max-md:relative md:grid-cols-[250px,1fr]">
       <Sidebar />
       <MobileSidebar />
       <div className="px-5 py-10 md:px-12 md:py-12 overflow-x-auto">

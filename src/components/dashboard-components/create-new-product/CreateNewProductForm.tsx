@@ -23,8 +23,10 @@ import { createNewProduct } from "@/app/(dashboard)/seller/add-product/actions";
 import { uploadFiles } from "@/lib/helper";
 import LoadingButton from "@/components/LoadingButton";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CreateNewProductForm() {
+  const router = useRouter();
   const form = useForm<createProductFormType>({
     resolver: zodResolver(createProductFormSchema),
   });
@@ -64,6 +66,8 @@ export default function CreateNewProductForm() {
           color: "white",
         },
       });
+      form.reset();
+      router.push("/seller/products");
     }
     if (response.status && response.status !== 200) {
       if (response.errors) {

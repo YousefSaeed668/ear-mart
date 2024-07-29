@@ -11,6 +11,12 @@ import { createProductFormType, predefinedColors } from "@/lib/validation";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { SpecificationsTableInput } from "./SpecificationsTableInput";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function ProductSpecifications({
   title,
@@ -19,10 +25,14 @@ export function ProductSpecifications({
   title?: string;
   index: number;
 }) {
-  const { control, setValue, watch } = useFormContext<createProductFormType>();
+  const {
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext<createProductFormType>();
   const isDiscountChecked = watch(`ProductVariants.${index}.Discount`);
 
-  // Clear DiscountPercent when Discount is unchecked
   useEffect(() => {
     if (!isDiscountChecked) {
       setValue(`ProductVariants.${index}.DiscountPercent`, "");
@@ -127,6 +137,30 @@ export function ProductSpecifications({
           Used for products that come in diffenet variations
         </p>
       </div>
+      {errors.ProductVariants && (
+        <div>
+          <div className="flex items-center mb-3 gap-3">
+            {predefinedColors.map((color) => (
+              <TooltipProvider key={color} delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger type="button">
+                    {" "}
+                    <div
+                      className="h-3 w-3 rounded-full border shadow-md"
+                      style={{ backgroundColor: color }}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>{color}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </div>
+          <p className="mb-10 text-textGrayColor">
+            Or You can just Put Hexadecimel Color
+          </p>
+        </div>
+      )}
+
       <div className="relative rounded-lg overflow-hidden">
         <table className="w-full border-collapse">
           <thead>

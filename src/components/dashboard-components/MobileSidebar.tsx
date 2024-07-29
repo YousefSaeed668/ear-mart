@@ -8,7 +8,7 @@ import { signOut } from "next-auth/react";
 export function MobileSidebar() {
   const pathname = usePathname();
   return (
-    // Todo: fix z-index issue
+    
     <div className="fixed bottom-0 left-0 h-14 w-full flex items-center border-t z-50 bg-lightGrayColor shadow-xl max-[550px]:justify-between min-[550px]:gap-4 justify-center md:hidden px-5">
       {SIDEBAR_LINKS.map((link) => {
         if (link.title === "Logout") {

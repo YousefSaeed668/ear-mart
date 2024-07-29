@@ -46,14 +46,22 @@ interface TagsProps {
 }
 
 function Tags({ placeholder, value, onChange }: TagsProps) {
+  const { setError, clearErrors } = useFormContext();
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const addValue = (item: string) => {
-    if (!value.includes(item)) {
-      onChange([...value, item]);
+    if (item.length <= 30) {
+      if (!value.includes(item)) {
+        onChange([...value, item]);
+        clearErrors("SubCategoryNames"); // Clear the error when a valid tag is added
+      }
+      setInputValue("");
+    } else {
+      setError("SubCategoryNames", {
+        message: "Tags cannot be more than 30 characters",
+      });
     }
-    setInputValue("");
   };
 
   const removeValue = (item: string) => {
@@ -71,7 +79,7 @@ function Tags({ placeholder, value, onChange }: TagsProps) {
 
   return (
     <div
-      className="flex flex-wrap items-center border rounded-md p-2 focus-within:ring-4  focus-within:ring-primaryColor focus-within:ring-offset-0 min-h-[40px] overflow-x-auto"
+      className="flex flex-wrap items-center border rounded-md p-2 focus-within:ring-4 focus-within:ring-primaryColor focus-within:ring-offset-0 min-h-[40px] overflow-x-auto"
       onClick={() => inputRef.current?.focus()}
     >
       {value.map((item, index) => (

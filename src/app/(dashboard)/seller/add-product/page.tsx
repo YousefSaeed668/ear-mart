@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const CreateNewProductForm = dynamic(
   () =>
@@ -17,7 +18,7 @@ export default function page() {
           Add new product
         </h1>
         <Button className="uppercase" variant="outline">
-          back to products list
+          <Link href="/seller/products">back to products list</Link>
         </Button>
       </div>
       <CreateNewProductForm />

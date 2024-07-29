@@ -77,7 +77,24 @@ export function SellerProductsTable() {
                       : "No offers"}
                   </div>
                   <div>{product.Quantity}</div>
-                  <div className="text-green-500">In Stock</div>
+                  <div className="flex items-center">
+                    <div
+                      className={`w-3 h-3 rounded-full`}
+                      style={{
+                        backgroundColor:
+                          product.ProductStatus === "accepted"
+                            ? "#03fb75"
+                            : product.ProductStatus === "rejected"
+                            ? "#fb0303"
+                            : product.ProductStatus === "pending"
+                            ? "#f0ad4e"
+                            : "#d3d3d3",
+                      }}
+                    />
+                    <span className="ml-2 capitalize">
+                      {product.ProductStatus}
+                    </span>
+                  </div>
                   <div>{product.CategoryName}</div>
                   <div>
                     <Link href={`/seller/edit-product/${product.ProductId}`}>
