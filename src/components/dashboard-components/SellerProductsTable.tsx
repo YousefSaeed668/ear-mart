@@ -20,9 +20,10 @@ export function SellerProductsTable() {
   const { data, isPending } = useGetSellerProducts();
 
   if (isPending) {
+    //Todo : Add a loading Skelton
     return <DashboardCard className="px-6 py-4">Loading...</DashboardCard>;
   }
-  if (data.message)
+  if (data?.message)
     return <DashboardCard className="px-6 py-4">{data.message}</DashboardCard>;
   return (
     <div className="w-full max-[1100px]:w-fit">
