@@ -23,8 +23,10 @@ export function SellerProductsTable() {
     //Todo : Add a loading Skelton
     return <DashboardCard className="px-6 py-4">Loading...</DashboardCard>;
   }
-  if (data?.message)
-    return <DashboardCard className="px-6 py-4">{data.message}</DashboardCard>;
+  if (data?.Items.length === 0)
+    return (
+      <DashboardCard className="px-6 py-4">{"No Product Found"}</DashboardCard>
+    );
   return (
     <div className="w-full max-[1100px]:w-fit">
       <DashboardCard className="font-poppins min-h-screen ">

@@ -40,7 +40,6 @@ export async function getSellerProducts(
   search: string,
   stock: string
 ) {
-  console.log(page, search, status, stock);
   const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.Token) {
     throw new Error("Unauthorized: User not authenticated");
@@ -58,7 +57,11 @@ export async function getSellerProducts(
   );
   if (response.status === 404) {
     return {
-      message: "No products found",
+      Items: [],
+      PageNumber: 0,
+      PageSize: 0,
+      TotalPages: 0,
+      TotalItems: 0,
     };
   }
   if (!response.ok) {
