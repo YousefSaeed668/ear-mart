@@ -16,8 +16,9 @@ import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 
 export function SellerProductsTable() {
-  const { data, isPending, isFetching } = useGetSellerProducts();
-
+  const { data, isLoading, isPending, isFetching } = useGetSellerProducts();
+  console.log(isLoading);
+  console.log(isPending);
   if (isFetching) {
     return (
       <DashboardCard className="px-6 py-4">
