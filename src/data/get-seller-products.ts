@@ -12,6 +12,5 @@ export function useGetSellerProducts() {
   return useQuery({
     queryKey: ["seller-products", page, status, search, stock],
     queryFn: () => getSellerProducts(Number(page), status, search, stock),
-    staleTime: Infinity,
   });
 }
