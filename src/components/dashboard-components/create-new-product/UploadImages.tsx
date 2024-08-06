@@ -1,29 +1,69 @@
 import { formatFileSize } from "@/lib/utils";
 import { GripVertical, X } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { Reorder, motion } from "framer-motion";
 
 interface FileWithPreview {
   id: string;
-  file: File;
+  file: File | string;
   preview: string;
 }
+
 interface UploadImagesProps {
-  onOrderChange: (files: File[]) => void;
+  onOrderChange: (files: (File | string)[]) => void;
   error?: string;
+  defaultImages?: string[];
 }
-export function UploadImages({ onOrderChange, error }: UploadImagesProps) {
+
+export function UploadImages({
+  onOrderChange,
+  error,
+  defaultImages = [],
+}: UploadImagesProps) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [order, setOrder] = useState<string[]>([]);
+
+  const isDefaultImagesInitialized = useRef(false);
+
+  useEffect(() => {
+    if (!isDefaultImagesInitialized.current) {
+      const defaultFileItems = defaultImages.map((url) => ({
+        id: Math.random().toString(36).substr(2, 9),
+        file: url,
+        preview: `${process.env.NEXT_PUBLIC_API_URL}/${url}`,
+      }));
+      setFiles((prevFiles) => {
+        const newFiles = [...prevFiles];
+        defaultFileItems.forEach((item) => {
+          if (!newFiles.some((f) => f.file === item.file)) {
+            newFiles.push(item);
+          }
+        });
+        return newFiles;
+      });
+      setOrder((prevOrder) => {
+        const newOrder = [...prevOrder];
+        defaultFileItems.forEach((item) => {
+          if (!newOrder.includes(item.id)) {
+            newOrder.push(item.id);
+          }
+        });
+        return newOrder;
+      });
+
+      isDefaultImagesInitialized.current = true;
+    }
+  }, [defaultImages]);
 
   useEffect(() => {
     const orderedFiles = order
       .map((id) => files.find((f) => f.id === id)?.file)
-      .filter((f): f is File => f !== undefined);
+      .filter((f): f is File | string => f !== undefined);
     onOrderChange(orderedFiles);
   }, [order, files, onOrderChange]);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map((file) => ({
       id: Math.random().toString(36).substr(2, 9),
@@ -40,7 +80,13 @@ export function UploadImages({ onOrderChange, error }: UploadImagesProps) {
   }, []);
 
   useEffect(() => {
-    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
+    return () => {
+      files.forEach((file) => {
+        if (file.file instanceof File) {
+          URL.revokeObjectURL(file.preview);
+        }
+      });
+    };
   }, [files]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -102,19 +148,27 @@ export function UploadImages({ onOrderChange, error }: UploadImagesProps) {
                   <motion.div layoutId={`image-${id}`}>
                     <Image
                       src={file.preview}
-                      alt={file.file.name}
+                      alt={
+                        file.file instanceof File
+                          ? file.file.name
+                          : "Uploaded image"
+                      }
                       className="object-cover rounded-lg"
-                      width={64}
-                      height={64}
+                      width={file.file instanceof File ? 64 : 400}
+                      height={file.file instanceof File ? 64 : 400}
                       style={{ width: "64px", height: "64px" }}
                     />
                   </motion.div>
                   <div className="flex flex-col gap-1 flex-grow">
                     <span className="text-sm font-semibold">
-                      {file.file.name}
+                      {file.file instanceof File
+                        ? file.file.name
+                        : "Uploaded image"}
                     </span>
                     <span className="text-textGrayColor">
-                      {formatFileSize(file.file.size)}
+                      {file.file instanceof File
+                        ? formatFileSize(file.file.size)
+                        : ""}
                     </span>
                   </div>
                   <X

@@ -12,7 +12,7 @@ export function Sidebar() {
   const { data: session, status } = useSession();
 
   return (
-    <div className="bg-lightGrayColor shadow-md px-5 py-6 h-full flex-col justify-between hidden md:flex font-poppins font-medium">
+    <div className="bg-lightGrayColor shadow-md px-5 py-6 h-full flex-col min-h-screen justify-between hidden md:flex font-poppins font-medium">
       <div className="flex mb-10 justify-center">
         <Image src="/logo1.svg" width={100} height={100} alt="logo" />
       </div>

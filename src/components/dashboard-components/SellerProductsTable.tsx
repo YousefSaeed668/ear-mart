@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 
 export function SellerProductsTable() {
   const { data, isPending } = useGetSellerProducts();
+
   if (isPending) {
     return (
       <DashboardCard className="px-6 py-4">
@@ -34,11 +35,21 @@ export function SellerProductsTable() {
           </div>
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">Oops!</h2>
           <p className="text-gray-600 mb-4">{data?.message}</p>
-          <Button className="px-4 py-2  rounded-md  transition-colors" asChild>
-            <Link href="/seller/products" className="uppercase">
-              Reset Filters
-            </Link>
-          </Button>
+          <div className="flex items-center gap-5 justify-center">
+            <Button
+              className="px-8 py-6  rounded-md  transition-colors"
+              asChild
+            >
+              <Link href="/seller/products" className="uppercase">
+                Reset Filters
+              </Link>
+            </Button>
+            <Button asChild className="py-6 rounded-md">
+              <Link href="/seller/add-product" className="uppercase">
+                Add New Product
+              </Link>
+            </Button>
+          </div>
         </div>
       </DashboardCard>
     );
@@ -47,14 +58,14 @@ export function SellerProductsTable() {
       <DashboardCard className="font-poppins min-h-screen ">
         <div className="grid grid-cols-[30px,1fr,1fr,1fr,1fr,1fr,1fr,1fr,1fr] gap-4 p-4 min-w-[800px]">
           <div></div>
-          <div className="text-textGrayColor">Product ID</div>
-          <div className="text-textGrayColor">Product Name</div>
-          <div className="text-textGrayColor">Price</div>
-          <div className="text-textGrayColor">Offers</div>
-          <div className="text-textGrayColor">Inventory</div>
-          <div className="text-textGrayColor">Status</div>
-          <div className="text-textGrayColor">Category</div>
-          <div className="text-textGrayColor">Edit</div>
+          <div className="text-textGrayColor text-center">Product ID</div>
+          <div className="text-textGrayColor text-center">Product Name</div>
+          <div className="text-textGrayColor text-center">Price</div>
+          <div className="text-textGrayColor text-center">Offers</div>
+          <div className="text-textGrayColor text-center">Inventory</div>
+          <div className="text-textGrayColor text-center">Status</div>
+          <div className="text-textGrayColor text-center">Category</div>
+          <div className="text-textGrayColor text-center">Edit</div>
           <Separator className="col-span-9" />
           <Accordion type="single" collapsible className="col-span-9">
             {data?.data.Items.map((product) => (
@@ -63,23 +74,25 @@ export function SellerProductsTable() {
                 key={product.ProductId}
               >
                 <AccordionTrigger className=" py-6 w-full grid grid-cols-[30px,1fr,1fr,1fr,1fr,1fr,1fr,1fr,1fr] gap-4 col-span-9 text-start font-medium">
-                  <div>{product.ProductId}</div>
-                  <div className="truncate">{product.ProductTitle}</div>
-                  <div>
+                  <div className="text-center">{product.ProductId}</div>
+                  <div className="truncate text-center">
+                    {product.ProductTitle}
+                  </div>
+                  <div className="text-center">
                     {Math.max(
                       ...product.ProductVariants.map((variant) => variant.Price)
                     )}{" "}
                     EGP
                   </div>
-                  <div>
+                  <div className="text-center">
                     {product.DiscountPercent > 0
                       ? `${product.DiscountPercent}% off`
                       : "No offers"}
                   </div>
-                  <div>{product.Quantity}</div>
-                  <div className="flex items-center">
+                  <div className="text-center">{product.Quantity}</div>
+                  <div className="flex items-center justify-center">
                     <div
-                      className={`w-3 h-3 rounded-full`}
+                      className={`w-3 h-3 rounded-full `}
                       style={{
                         backgroundColor:
                           product.ProductStatus === "accepted"
@@ -91,14 +104,17 @@ export function SellerProductsTable() {
                             : "#d3d3d3",
                       }}
                     />
-                    <span className="ml-2 capitalize">
+                    <span className="ml-2 capitalize ">
                       {product.ProductStatus}
                     </span>
                   </div>
-                  <div>{product.CategoryName}</div>
+                  <div className="text-center">{product.CategoryName}</div>
                   <div>
-                    <Link href={`/seller/edit-product/${product.ProductId}`}>
-                      <Edit />
+                    <Link
+                      href={`/seller/edit-product/${product.ProductId}`}
+                      className=""
+                    >
+                      <Edit className="mx-auto" />
                     </Link>
                   </div>
                 </AccordionTrigger>

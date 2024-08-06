@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
@@ -24,6 +24,15 @@ export function SpecificationsTableInput({
     }
   };
 
+  const fieldValue = useWatch({
+    name: name,
+  });
+
+  useEffect(() => {
+    if (fieldValue && !badge) {
+      setBadge(fieldValue);
+    }
+  }, [fieldValue, badge]);
   return (
     <div className="flex items-center gap-2">
       {badge ? (

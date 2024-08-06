@@ -24,11 +24,37 @@ import { uploadFiles } from "@/lib/helper";
 import LoadingButton from "@/components/LoadingButton";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { updateProduct } from "@/app/(dashboard)/seller/edit-product/[productId]/actions";
+import { Button } from "@/components/ui/button";
+import { DeleteDialog } from "../DeleteDialog";
 
-export default function CreateNewProductForm() {
+export default function CreateNewProductForm({
+  initalData,
+}: {
+  initalData?: Product;
+}) {
   const router = useRouter();
   const form = useForm<createProductFormType>({
     resolver: zodResolver(createProductFormSchema),
+    defaultValues: initalData
+      ? {
+          ProductTitle: initalData.ProductTitle,
+          SubTitle: initalData.SubTitle,
+          ProductDescription: initalData.ProductDescription,
+          ProductVariants: initalData.ProductVariants.map((variant) => ({
+            Discount: variant.DiscountPercent > 0,
+            DiscountPercent:
+              variant.DiscountPercent > 0
+                ? variant.DiscountPercent.toString()
+                : undefined,
+            Color: variant.Color || "",
+            Size: variant.Size || "",
+            Price: variant.Price.toString(),
+            StockQuantity: variant.StockQuantity.toString(),
+          })),
+          SubCategoryNames: initalData.SubCategoryNames,
+        }
+      : {},
   });
   const {
     handleSubmit,
@@ -36,8 +62,9 @@ export default function CreateNewProductForm() {
     setValue,
     setError,
   } = form;
+
   const handleFileOrderChange = useCallback(
-    (orderedFiles: File[]) => {
+    (orderedFiles: FileOrString[]) => {
       setValue("Files", orderedFiles);
     },
     [setValue]
@@ -52,21 +79,56 @@ export default function CreateNewProductForm() {
       return;
     }
 
-    const uploadedImages = await uploadFiles(data.Files);
+    const filesWithIndices = data.Files.map((item, index) => ({
+      item,
+      index,
+    })).filter(({ item }) => item instanceof File);
+
+    const filesToUpload: File[] = filesWithIndices.map(
+      ({ item }) => item as File
+    );
+
+    const uploadedUrls = await uploadFiles(filesToUpload);
+
+    const processedFiles = data.Files.map((item, index) => {
+      if (item instanceof File) {
+        const uploadedIndex = filesWithIndices.findIndex(
+          (f) => f.index === index
+        );
+        return { FileUrl: uploadedUrls[uploadedIndex] };
+      } else if (typeof item === "string") {
+        return { FileUrl: item };
+      }
+
+      return null;
+    }).filter((item) => item !== null);
+
     const { Files, ...dataWithoutFiles } = data;
-    const response = await createNewProduct({
-      ...dataWithoutFiles,
-      Files: uploadedImages,
-    });
+    const response = initalData
+      ? await updateProduct({
+          ProductId: initalData.ProductId,
+          ...dataWithoutFiles,
+          Files: processedFiles,
+        })
+      : await createNewProduct({
+          ...dataWithoutFiles,
+          Files: processedFiles,
+        });
+
     if (response.Success) {
-      toast.success("Product created successfully", {
-        position: "top-right",
-        style: {
-          backgroundColor: "green",
-          color: "white",
-        },
-      });
-      form.reset();
+      toast.success(
+        initalData
+          ? "Product updated successfully"
+          : "Product created successfully",
+        {
+          position: "top-right",
+          style: {
+            backgroundColor: "green",
+            color: "white",
+          },
+        }
+      );
+
       router.push("/seller/products");
     }
     if (response.status && response.status !== 200) {
@@ -154,17 +216,41 @@ export default function CreateNewProductForm() {
             <UploadImages
               error={errors.Files?.message}
               onOrderChange={handleFileOrderChange}
+              defaultImages={
+                initalData
+                  ? [
+                      initalData.ThumbnailUrl,
+                      ...initalData?.Files.map((file) => file.FileUrl),
+                    ]
+                  : []
+              }
             />
           </form>
         </Form>
+        {initalData && (
+          <div className="flex justify-center mt-20 mb-10">
+            <DeleteDialog
+              title="Are you sure /n
+          Delete this product?"
+              id={initalData.ProductId}
+            >
+              <Button
+                className="uppercase  text-[#EA4335] !border-[#EA4335] rounded-md"
+                variant="outline"
+              >
+                Delete this product
+              </Button>
+            </DeleteDialog>
+          </div>
+        )}
       </DashboardCard>
       <div className="flex  justify-center mb-12">
         <LoadingButton
           loading={isSubmitting}
           form="create-product-form"
-          className="px-14 py-6 rounded-md mt-12"
+          className="px-14 py-6 rounded-md mt-12 uppercase"
         >
-          Confirm
+          {initalData ? "Edit" : "Confirm"}
         </LoadingButton>
       </div>
     </>

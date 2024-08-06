@@ -1,3 +1,6 @@
+type UploadedImage = {
+  FileUrl: string;
+};
 export async function uploadFiles(files: File[]) {
   const formData = new FormData();
 
@@ -15,6 +18,7 @@ export async function uploadFiles(files: File[]) {
   if (!response.ok) {
     throw new Error("Failed to Upload Images");
   }
-  const data = await response.json();
-  return data;
+  const data: UploadedImage[] = await response.json();
+
+  return data.map((item) => item.FileUrl);
 }

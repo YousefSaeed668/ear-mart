@@ -171,7 +171,7 @@ export const createProductFormSchema = z.object({
   ProductDescription: z.string().min(100).max(5000),
   ProductVariants: z.array(ProductSpecificationSchema),
   CategoryName: z.string(),
-  Files: z.array(z.instanceof(File)),
+  Files: z.array(z.union([z.string(), z.instanceof(File)])),
   SubCategoryNames: z.array(z.string()),
 });
 

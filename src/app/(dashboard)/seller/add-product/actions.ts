@@ -11,7 +11,6 @@ type ServerActionData = Omit<createProductFormType, "Files"> & {
 };
 export async function createNewProduct(data: ServerActionData) {
   const session = await getServerSession(authOptions);
-
   if (!session || !session.user || !session.user.Token) {
     throw new Error("Unauthorized: User not authenticated");
   }
@@ -25,10 +24,9 @@ export async function createNewProduct(data: ServerActionData) {
       Price: Number(variant.Price),
       StockQuantity: Number(variant.StockQuantity),
     })),
-    Files: data.Files.splice(1),
+    Files: data.Files,
     ThumbnailUrl: data.Files[0].FileUrl,
   };
-
   const response = await fetch(
     "https://ear-mart.runasp.net/api/Product/CreateProduct",
     {
@@ -40,6 +38,7 @@ export async function createNewProduct(data: ServerActionData) {
       body: JSON.stringify(editedData),
     }
   );
+
   const result = await response.json();
   return result;
 }
