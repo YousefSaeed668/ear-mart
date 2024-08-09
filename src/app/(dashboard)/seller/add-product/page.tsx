@@ -2,11 +2,9 @@ import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
-const CreateNewProductForm = dynamic(
+const ProductForm = dynamic(
   () =>
-    import(
-      "@/components/dashboard-components/create-new-product/CreateNewProductForm"
-    ),
+    import("@/components/dashboard-components/create-new-product/ProductForm"),
   { ssr: false }
 );
 
@@ -21,7 +19,7 @@ export default function page() {
           <Link href="/seller/products">back to products list</Link>
         </Button>
       </div>
-      <CreateNewProductForm />
+      <ProductForm />
     </div>
   );
 }

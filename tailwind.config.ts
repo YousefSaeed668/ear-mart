@@ -21,6 +21,10 @@ const config = {
       fontFamily: {
         inter: "var(--font-inter)",
         poppins: "var(--font-poppins)",
+        philosopher: "var(--font-philosopher)",
+      },
+      screens: {
+        "3xl": "1920px",
       },
       colors: {
         primaryColor: "#00693D",

@@ -1,4 +1,5 @@
 type Category = {
+  CategoId: number;
   CategoryName: string;
 };
 type FileOrString = File | string;

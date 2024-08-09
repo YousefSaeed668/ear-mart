@@ -16,7 +16,8 @@ import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 
 export function SellerProductsTable() {
-  const { data,isFetching } = useGetSellerProducts();
+  const { data, isFetching } = useGetSellerProducts();
+
   if (isFetching) {
     return (
       <DashboardCard className="px-6 py-4">

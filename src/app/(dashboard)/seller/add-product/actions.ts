@@ -1,12 +1,12 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import { createProductFormType } from "@/lib/validation";
+import { ProductFormType } from "@/lib/validation";
 import { getServerSession } from "next-auth";
 type UploadedImage = {
   FileUrl: string;
 };
-type ServerActionData = Omit<createProductFormType, "Files"> & {
+type ServerActionData = Omit<ProductFormType, "Files"> & {
   Files: UploadedImage[];
 };
 export async function createNewProduct(data: ServerActionData) {

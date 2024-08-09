@@ -11,7 +11,7 @@ export function QuillEditor({ onChange, value }: QuillEditorProps) {
       theme="snow"
       modules={{
         toolbar: [
-          [{ header: [1, 2, false] }],
+          [{ header: [1, 2, 3, false] }],
           ["bold", "italic", "underline", "strike"],
           [
             { list: "ordered" },

@@ -165,7 +165,7 @@ const ProductSpecificationSchema = z.object({
   StockQuantity: z.string(),
 });
 
-export const createProductFormSchema = z.object({
+export const ProductFormSchema = z.object({
   ProductTitle: z.string().min(3).max(150),
   SubTitle: z.string().optional(),
   ProductDescription: z.string().min(100).max(5000),
@@ -175,4 +175,4 @@ export const createProductFormSchema = z.object({
   SubCategoryNames: z.array(z.string()),
 });
 
-export type createProductFormType = z.infer<typeof createProductFormSchema>;
+export type ProductFormType = z.infer<typeof ProductFormSchema>;

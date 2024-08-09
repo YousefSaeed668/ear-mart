@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { getProductById } from "./actions";
-import CreateNewProductForm from "@/components/dashboard-components/create-new-product/CreateNewProductForm";
+import ProductForm from "@/components/dashboard-components/create-new-product/ProductForm";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,7 @@ export default async function page({
     );
   }
   return (
-    <CreateNewProductForm
+    <ProductForm
       initalData={queryClient.getQueryData([`product${productId}`])}
     />
   );

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { createProductFormType, predefinedColors } from "@/lib/validation";
+import { ProductFormType, predefinedColors } from "@/lib/validation";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { SpecificationsTableInput } from "./SpecificationsTableInput";
@@ -30,7 +30,7 @@ export function ProductSpecifications({
     setValue,
     watch,
     formState: { errors },
-  } = useFormContext<createProductFormType>();
+  } = useFormContext<ProductFormType>();
   const isDiscountChecked = watch(`ProductVariants.${index}.Discount`);
 
   useEffect(() => {

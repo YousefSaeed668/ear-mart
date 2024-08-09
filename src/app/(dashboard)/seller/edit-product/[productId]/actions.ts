@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import { createProductFormType } from "@/lib/validation";
+import { ProductFormType } from "@/lib/validation";
 
 export async function getProductById(productId: string) {
   const session = await getServerSession(authOptions);
@@ -28,7 +28,7 @@ export async function getProductById(productId: string) {
 type UploadedImage = {
   FileUrl: string;
 };
-type ServerActionData = Omit<createProductFormType, "Files"> & {
+type ServerActionData = Omit<ProductFormType, "Files"> & {
   ProductId: number;
   Files: UploadedImage[];
 };
